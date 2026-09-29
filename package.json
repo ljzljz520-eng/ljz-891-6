@@ -1,0 +1,13 @@
+{
+  "name": "after-sales-auth-station",
+  "version": "1.0.0",
+  "description": "售后维修授权站：网点授权查询 + 总部授权信息维护与到期提醒",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "reset": "rm -f data/db.json && node -e \"import('./src/store.js').then(m=>{m.resetData();console.log('演示数据已重置');process.exit()})\""
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}

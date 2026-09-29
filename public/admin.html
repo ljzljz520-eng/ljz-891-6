@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>总部后台 - 售后维修授权站</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="inner">
+      <div class="brand">
+        <div class="logo">🏢</div>
+        <div>
+          <h1>总部管理后台</h1>
+          <div class="sub">授权信息维护 · 到期提醒 · 查询审计</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="/">网点查询端</a>
+        <button id="logoutBtn" class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:none;margin-left:12px;">退出登录</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 登录视图 -->
+  <div id="loginView" class="admin-wrap">
+    <div class="card login-card">
+      <div class="logo-big">🔐</div>
+      <h2>总部后台登录</h2>
+      <p class="desc">仅限授权管理人员使用，默认演示密码：<b>admin123</b></p>
+      <form id="loginForm">
+        <div class="form-item">
+          <label for="loginPwd">管理密码</label>
+          <input id="loginPwd" type="password" placeholder="请输入管理密码" autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="loginBtn">登 录</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 管理视图 -->
+  <div id="appView" class="admin-wrap" style="display:none;">
+    <!-- 统计卡片 -->
+    <div class="stat-grid">
+      <div class="stat stat-total"><div class="dot"></div><div><div class="num" id="stTotal">-</div><div class="lbl">授权网点总数</div></div></div>
+      <div class="stat stat-active"><div class="dot"></div><div><div class="num" id="stActive">-</div><div class="lbl">有效</div></div></div>
+      <div class="stat stat-expiring"><div class="dot"></div><div><div class="num" id="stExpiring">-</div><div class="lbl">30天内到期</div></div></div>
+      <div class="stat stat-expired"><div class="dot"></div><div><div class="num" id="stExpired">-</div><div class="lbl">已过期</div></div></div>
+    </div>
+
+    <!-- 到期提醒 -->
+    <div id="alerts"></div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="stations">📋 授权网点</button>
+      <button class="tab" data-tab="logs">📜 查询日志</button>
+    </div>
+
+    <!-- 网点管理 -->
+    <div id="tabStations">
+      <div class="toolbar">
+        <select id="filterStatus">
+          <option value="">全部状态</option>
+          <option value="active">有效</option>
+          <option value="expiring">30天内到期</option>
+          <option value="expired">已过期</option>
+          <option value="pending">未生效</option>
+        </select>
+        <input id="kw" type="text" placeholder="搜索编号 / 名称 / 负责人 / 品牌…" style="min-width:240px;" />
+        <button class="btn btn-sm" id="searchBtn">搜索</button>
+        <div class="spacer"></div>
+        <button class="btn btn-sm btn-ghost" id="resetBtn">↺ 恢复演示数据</button>
+        <button class="btn btn-primary btn-sm" id="addBtn">＋ 新增授权网点</button>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>网点编号</th><th>网点名称</th><th>负责人</th><th>可维修品牌</th>
+              <th>上级服务商</th><th>开通时间</th><th>授权期限</th><th>状态</th><th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="stationTbody"></tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <!-- 查询日志 -->
+    <div id="tabLogs" style="display:none;">
+      <div class="toolbar">
+        <span style="font-size:13px;color:var(--gray-500);">记录网点端的每一次查询（最多保留 300 条）</span>
+        <div class="spacer"></div>
+        <button class="btn btn-sm" id="refreshLogsBtn">刷新</button>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table>
+          <thead><tr><th>时间</th><th>网点编号</th><th>负责人</th><th>查询结果</th><th>来源 IP</th></tr></thead>
+          <tbody id="logTbody"></tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <p class="page-foot" id="todayText"></p>
+  </div>
+
+  <!-- 新增 / 编辑 模态框 -->
+  <div class="modal-mask" id="editMask">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 id="editTitle">新增授权网点</h3>
+        <button class="modal-close" data-close="editMask">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="editForm">
+          <input type="hidden" id="fId" />
+          <div class="form-grid">
+            <div class="form-item">
+              <label>网点编号<span class="req">*</span></label>
+              <input id="fCode" placeholder="如：SH-002" />
+            </div>
+            <div class="form-item">
+              <label>网点名称<span class="req">*</span></label>
+              <input id="fName" placeholder="如：上海浦东授权服务站" />
+            </div>
+            <div class="form-item">
+              <label>授权负责人<span class="req">*</span></label>
+              <input id="fPrincipal" placeholder="登记的负责人姓名" />
+            </div>
+            <div class="form-item">
+              <label>联系电话</label>
+              <input id="fPhone" placeholder="选填" />
+            </div>
+            <div class="form-item full">
+              <label>可维修品牌<span class="req">*</span></label>
+              <input id="fBrands" placeholder="多个品牌用顿号或逗号分隔，如：海尔、美的、格力" />
+            </div>
+            <div class="form-item full">
+              <label>上级服务商<span class="req">*</span></label>
+              <input id="fParent" placeholder="如：华东技术服务有限公司（上海）" />
+            </div>
+            <div class="form-item">
+              <label>开通时间<span class="req">*</span></label>
+              <input id="fOpened" type="date" />
+            </div>
+            <div class="form-item">
+              <label>授权开始日期<span class="req">*</span></label>
+              <input id="fStart" type="date" />
+            </div>
+            <div class="form-item">
+              <label>授权到期日期<span class="req">*</span></label>
+              <input id="fExpire" type="date" />
+            </div>
+            <div class="form-item">
+              <label>备注</label>
+              <input id="fRemark" placeholder="选填" />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" data-close="editMask">取消</button>
+        <button class="btn btn-primary" id="saveBtn">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 续期模态框 -->
+  <div class="modal-mask" id="renewMask">
+    <div class="modal" style="width:460px;">
+      <div class="modal-head">
+        <h3>授权续期</h3>
+        <button class="modal-close" data-close="renewMask">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:13.5px;color:var(--gray-500);margin-bottom:16px;">
+          正在为 <b id="renewWho" style="color:var(--gray-900);"></b> 办理续期
+        </p>
+        <form id="renewForm">
+          <div class="form-item">
+            <label>新授权开始日期<span class="req">*</span></label>
+            <input id="rStart" type="date" />
+          </div>
+          <div class="form-item">
+            <label>新授权到期日期<span class="req">*</span></label>
+            <input id="rExpire" type="date" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" data-close="renewMask">取消</button>
+        <button class="btn btn-primary" id="renewSaveBtn">确认续期</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+  <script src="/js/common.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

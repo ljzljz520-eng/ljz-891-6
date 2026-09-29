@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>售后维修授权查询 - 维修网点服务平台</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="inner">
+      <div class="brand">
+        <div class="logo">🛠️</div>
+        <div>
+          <h1>售后维修授权站</h1>
+          <div class="sub">维修网点授权信息查询系统</div>
+        </div>
+      </div>
+      <nav class="nav"><a href="/admin">总部后台 →</a></nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 32px 20px 60px;">
+    <div class="card">
+      <div class="section-title">授权信息查询</div>
+      <p style="color: var(--gray-500); font-size: 13.5px; margin: -8px 0 20px;">
+        请输入本网点的<b>网点编号</b>与<b>授权负责人姓名</b>，系统将返回可维修品牌、授权期限、上级服务商及开通时间。
+      </p>
+      <form id="queryForm" novalidate>
+        <div class="form-row">
+          <div class="form-item">
+            <label for="code">网点编号<span class="req">*</span></label>
+            <input id="code" name="code" type="text" placeholder="例如：SH-002" autocomplete="off" />
+            <div class="error-text" id="codeErr"></div>
+          </div>
+          <div class="form-item">
+            <label for="principal">授权负责人<span class="req">*</span></label>
+            <input id="principal" name="principal" type="text" placeholder="请输入登记的负责人姓名" autocomplete="off" />
+            <div class="error-text" id="principalErr"></div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="queryBtn" style="min-width: 140px;">🔍 查 询</button>
+      </form>
+
+      <!-- 演示快捷入口 -->
+      <div class="demo-bar">
+        <div class="demo-title">🎯 演示账号（点击自动填充）</div>
+        <div class="demo-chips">
+          <button type="button" class="demo-chip" data-code="SH-002" data-name="王雪梅">成功 · 正常有效<small>SH-002 / 王雪梅</small></button>
+          <button type="button" class="demo-chip" data-code="BJ-001" data-name="李志强">成功 · 临近到期<small>BJ-001 / 李志强</small></button>
+          <button type="button" class="demo-chip" data-code="WH-006" data-name="黄国强">成功 · 多品牌授权<small>WH-006 / 黄国强</small></button>
+          <button type="button" class="demo-chip" data-code="ZZ-999" data-name="张三">失败 · 编号不存在<small>ZZ-999</small></button>
+          <button type="button" class="demo-chip" data-code="SZ-004" data-name="张三">失败 · 负责人不符<small>SZ-004 / 张三</small></button>
+          <button type="button" class="demo-chip" data-code="GZ-003" data-name="陈伟">失败 · 授权已过期<small>GZ-003 / 陈伟</small></button>
+          <button type="button" class="demo-chip" data-code="CD-005" data-name="孙鹏">失败 · 尚未生效<small>CD-005 / 孙鹏</small></button>
+        </div>
+      </div>
+
+      <!-- 查询结果 -->
+      <div id="result" class="result"></div>
+    </div>
+
+    <p class="page-foot">本页面仅向授权网点开放查询能力，授权信息由总部后台统一维护 · 查询行为将被记录</p>
+  </main>
+
+  <div id="toast"></div>
+  <script src="/js/common.js"></script>
+  <script src="/js/query.js"></script>
+</body>
+</html>

@@ -23,3 +23,6 @@ __pycache__/
 *.log
 .env
 .env.*
+
+# 本项目运行时数据（删除后重启会自动从 seed.json 恢复）
+data/db.json

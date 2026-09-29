@@ -1,0 +1,83 @@
+{
+  "stations": [
+    {
+      "id": 1,
+      "code": "BJ-001",
+      "name": "北京朝阳授权服务站",
+      "principal": "李志强",
+      "phone": "010-8562-1188",
+      "brands": ["海尔", "美的", "格力"],
+      "parentProvider": "华北区客户服务中心（北京）",
+      "openedAt": "2021-05-18",
+      "startAt": "2025-10-21",
+      "expireAt": "2026-10-20",
+      "remark": "旗舰店，临近到期，请及时续期"
+    },
+    {
+      "id": 2,
+      "code": "SH-002",
+      "name": "上海浦东授权服务站",
+      "principal": "王雪梅",
+      "phone": "021-5876-2233",
+      "brands": ["西门子", "博世"],
+      "parentProvider": "华东技术服务有限公司（上海）",
+      "openedAt": "2019-03-02",
+      "startAt": "2025-09-01",
+      "expireAt": "2027-08-31",
+      "remark": "授权有效期充足"
+    },
+    {
+      "id": 3,
+      "code": "GZ-003",
+      "name": "广州天河授权服务站",
+      "principal": "陈伟",
+      "phone": "020-3866-7799",
+      "brands": ["TCL", "创维"],
+      "parentProvider": "华南售后服务管理中心（广州）",
+      "openedAt": "2018-11-10",
+      "startAt": "2024-09-01",
+      "expireAt": "2026-08-31",
+      "remark": "授权已过期，暂停派单"
+    },
+    {
+      "id": 4,
+      "code": "SZ-004",
+      "name": "深圳南山授权服务站",
+      "principal": "周建华",
+      "phone": "0755-8632-5566",
+      "brands": ["华为", "小米", "荣耀"],
+      "parentProvider": "粤港澳大湾区服务联盟（深圳）",
+      "openedAt": "2022-07-25",
+      "startAt": "2025-09-30",
+      "expireAt": "2027-09-29",
+      "remark": "用于演示负责人姓名不匹配"
+    },
+    {
+      "id": 5,
+      "code": "CD-005",
+      "name": "成都高新授权服务站",
+      "principal": "孙鹏",
+      "phone": "028-8517-9900",
+      "brands": ["长虹", "海信"],
+      "parentProvider": "西南区域服务管理部（成都）",
+      "openedAt": "2026-09-20",
+      "startAt": "2026-10-15",
+      "expireAt": "2027-10-14",
+      "remark": "授权尚未生效（开通时间早于授权起始日）"
+    },
+    {
+      "id": 6,
+      "code": "WH-006",
+      "name": "武汉武昌授权服务站",
+      "principal": "黄国强",
+      "phone": "027-8726-3344",
+      "brands": ["格力", "美的", "小天鹅"],
+      "parentProvider": "华中综合服务中心（武汉）",
+      "openedAt": "2020-06-08",
+      "startAt": "2025-04-01",
+      "expireAt": "2027-03-31",
+      "remark": "正常有效网点"
+    }
+  ],
+  "logs": []
+}
