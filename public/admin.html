@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>总部后台 · 授权管理</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏢</text></svg>" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="logo">🏢</span>
+        <div>
+          总部售后管理后台
+          <small>HQ AUTHORIZATION CONSOLE</small>
+        </div>
+      </div>
+      <nav>
+        <a href="/">网点授权查询</a>
+        <a href="/admin" class="active">总部后台</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-head">
+      <div>
+        <h1>授权信息管理</h1>
+        <div class="sub">维护网点授权档案，系统按到期日自动生成状态与续期提醒 · 今天：<b id="today"></b></div>
+      </div>
+      <button class="btn btn-primary" style="width:auto" id="btnCreate">＋ 新增授权网点</button>
+    </div>
+
+    <!-- 统计卡片 -->
+    <section class="stat-grid" id="statGrid"></section>
+
+    <!-- 到期提醒 -->
+    <section class="card panel">
+      <div class="panel-head">
+        <h2>🔔 到期提醒 <span style="font-size:12.5px;color:var(--muted);font-weight:400">（30 天内到期及已过期，按到期日升序）</span></h2>
+      </div>
+      <div id="reminderBox" class="remind-list"></div>
+    </section>
+
+    <!-- 授权列表 -->
+    <section class="card panel">
+      <div class="panel-head">
+        <h2>📋 授权网点列表</h2>
+        <div class="toolbar">
+          <input type="search" id="searchInput" placeholder="搜索编号 / 名称 / 负责人 / 电话" style="width:230px" />
+          <select id="brandFilter"><option value="">全部品牌</option></select>
+          <select id="statusFilter">
+            <option value="">全部状态</option>
+            <option value="active">授权有效</option>
+            <option value="expiring">即将到期</option>
+            <option value="expired">已到期</option>
+            <option value="suspended">已停用</option>
+          </select>
+          <button class="btn btn-ghost btn-sm" id="btnReset">重置</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>网点编号</th>
+              <th>网点 / 负责人</th>
+              <th>可维修品牌</th>
+              <th>上级服务商</th>
+              <th>授权期限</th>
+              <th>剩余</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+        <div id="tableEmpty" class="empty" hidden>
+          <span class="ico">🗂️</span>
+          暂无符合条件的授权记录
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 编辑弹窗 -->
+  <div class="modal-mask" id="modalMask">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 id="modalTitle">新增授权网点</h3>
+        <button class="modal-close" id="modalClose">×</button>
+      </div>
+      <form id="stationForm">
+        <div class="modal-body">
+          <input type="hidden" id="f_id" />
+          <div class="form-grid">
+            <div class="field">
+              <label>网点编号<span class="req">*</span></label>
+              <input id="f_code" required maxlength="20" placeholder="如：AS007" />
+            </div>
+            <div class="field">
+              <label>网点名称<span class="req">*</span></label>
+              <input id="f_name" required maxlength="50" placeholder="如：南京新街口授权服务站" />
+            </div>
+            <div class="field">
+              <label>授权负责人<span class="req">*</span></label>
+              <input id="f_manager" required maxlength="20" placeholder="备案负责人姓名" />
+            </div>
+            <div class="field">
+              <label>联系电话</label>
+              <input id="f_phone" maxlength="20" placeholder="座机或手机" />
+            </div>
+            <div class="field">
+              <label>所属区域</label>
+              <input id="f_region" maxlength="50" placeholder="如：江苏省南京市玄武区" />
+            </div>
+            <div class="field">
+              <label>上级服务商<span class="req">*</span></label>
+              <input id="f_parent" required maxlength="80" placeholder="如：江苏区一级服务商 · ××公司" />
+            </div>
+            <div class="field full">
+              <label>网点地址</label>
+              <input id="f_address" maxlength="120" placeholder="详细地址" />
+            </div>
+            <div class="field full">
+              <label>可维修品牌<span class="req">*</span></label>
+              <input id="f_brands" required placeholder="多个品牌用顿号 / 逗号分隔，如：海尔、美的、格力" />
+              <div class="hint">也可在保存后于列表中快速核对</div>
+            </div>
+            <div class="field">
+              <label>开通时间（授权开始日）<span class="req">*</span></label>
+              <input id="f_start" type="date" required />
+            </div>
+            <div class="field">
+              <label>授权到期日<span class="req">*</span></label>
+              <input id="f_expire" type="date" required />
+            </div>
+            <div class="field full">
+              <label>备注</label>
+              <textarea id="f_remark" rows="2" maxlength="200" placeholder="考核、续期、整改等说明（选填）"></textarea>
+            </div>
+            <div class="field full">
+              <label class="checkbox-field">
+                <input type="checkbox" id="f_suspended" />
+                暂停 / 注销该网点授权（停用后网点端查询将被拒绝）
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-ghost" id="modalCancel">取消</button>
+          <button type="submit" class="btn btn-primary" style="width:auto" id="modalSave">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

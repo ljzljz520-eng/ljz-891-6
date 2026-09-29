@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>售后维修授权查询 · 网点端</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="logo">🔧</span>
+        <div>
+          售后维修授权站
+          <small>AUTHORIZED SERVICE STATION</small>
+        </div>
+      </div>
+      <nav>
+        <a href="/" class="active">网点授权查询</a>
+        <a href="/admin">总部后台</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>维修网点授权信息查询</h1>
+      <p>请输入总部下发的网点编号与备案授权负责人姓名，核验可维修品牌、授权期限等信息</p>
+    </section>
+
+    <section class="card query-card">
+      <h2>🔐 授权核验</h2>
+      <form id="queryForm" autocomplete="off">
+        <div class="field">
+          <label for="code">网点编号<span class="req">*</span></label>
+          <input type="text" id="code" name="code" placeholder="例如：AS001" maxlength="20" />
+        </div>
+        <div class="field">
+          <label for="manager">授权负责人<span class="req">*</span></label>
+          <input type="text" id="manager" name="manager" placeholder="请输入备案负责人真实姓名" maxlength="20" />
+          <div class="hint">信息经加密核验，仅用于授权身份确认</div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitBtn">
+          <span id="btnText">查询授权信息</span>
+        </button>
+      </form>
+
+      <div class="demo-hint">
+        <b>🎯 演示数据（点击可快速填入）</b>
+        <div class="demo-row" data-code="AS001" data-manager="张伟">
+          <span>✅ 查询成功：</span><code>AS001</code> / <code>张伟</code>
+          <span style="opacity:.75">→ 授权有效，多品牌</span>
+        </div>
+        <div class="demo-row" data-code="AS002" data-manager="李娜">
+          <span>⚠️ 临近到期：</span><code>AS002</code> / <code>李娜</code>
+          <span style="opacity:.75">→ 15 天后到期</span>
+        </div>
+        <div class="demo-row" data-code="AS003" data-manager="王强">
+          <span>❌ 查询失败：</span><code>AS003</code> / <code>王强</code>
+          <span style="opacity:.75">→ 授权已到期</span>
+        </div>
+        <div class="demo-row" data-code="AS004" data-manager="赵敏">
+          <span>❌ 查询失败：</span><code>AS004</code> / <code>赵敏</code>
+          <span style="opacity:.75">→ 授权已停用</span>
+        </div>
+        <div class="demo-row" data-code="AS999" data-manager="张三">
+          <span>❌ 查询失败：</span><code>AS999</code> / <code>张三</code>
+          <span style="opacity:.75">→ 网点不存在</span>
+        </div>
+        <div class="demo-row" data-code="AS001" data-manager="李四">
+          <span>❌ 查询失败：</span><code>AS001</code> / <code>李四</code>
+          <span style="opacity:.75">→ 负责人不匹配</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="result" class="result" hidden></section>
+
+    <p class="foot-note">本系统数据由总部售后服务中心统一维护 · 授权信息以系统实时查询结果为准</p>
+  </main>
+
+  <script src="/js/query.js"></script>
+</body>
+</html>

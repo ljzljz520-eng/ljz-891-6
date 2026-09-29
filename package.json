@@ -1,0 +1,16 @@
+{
+  "name": "after-sales-auth-station",
+  "version": "1.0.0",
+  "description": "售后维修授权站系统：维修网点授权查询 + 总部后台授权维护与到期提醒（零依赖 Node.js）",
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "seed": "node scripts/seed.js",
+    "dev": "node --watch server/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
